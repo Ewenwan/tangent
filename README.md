@@ -6,6 +6,31 @@
 Tangent is a new, free, and open-source Python library for automatic differentiation.  
 
 
+相较于现有机器学习资源训，Tangent 属于一套源到源系统，其使用 Python f 函数并生成另一新 Python 函数以计算 f 梯度。通过这种方式，用户能够更好地理解梯度计算流程，并轻松完成用户级梯度编辑与调试任务。
+
+Tangent 亦拥有以下机器学习模型调试与设计能力：轻松调试您的反向传播 快速梯度调整正向模式自动差异化高效 Hessian 矢量产品代码优化在今天的文章中，我们将对 Tangent API 作出概述。
+
+文章内容涵盖如何在 Python 中利用 Tangent 生成易于解释、调试以及修改的梯度代码。神经网络（简称 NN）已经在图像、视频、音频以及文本类机器学习模型领域取得了巨大成功。而让我们得以训练出能够在此类任务中带来良好表现的神经网络的基本抽象思路，则源自 30 年前即已诞生的概念，即反向模式自动微分（亦被称为反向传播）——其中包括两次神经网络通过流程。
+
+首先，我们运行“正向传播”以计算每个节点的输出值。之后，我们运行“反向传播”以计算一系列层数，从而确定如何更新权重以提高模型的准确性。要对神经网络进行训练并面向新型架构加以研究，要求我们以正确、高效且便捷的方式实现导数计算任务。如果我们的模型训练效果不佳，或者尝试构建自己尚不了解的新鲜事物，则必然需要有能力对其作出调试。
+
+所谓自动微分，或者简称“autodiff”，是指一项用于计算计算机程序内负责表示某些数学函数的导数的技术手段。目前，几乎全部机器学习库都在使用自动微分技术。
+
+现有各类资源库在实现自动微分方面，主要采用追踪程序执行（立足于 TF Eager、PyTorch 以及 Autograd 等运行时内），或者构建动态数据流图形而后对图形加以微分（进行提前微分，TensorFlow 即采取此种方法）的方式。相比之下，Tangent 则可直接对 Python 源代码进行提前自动微分，并以输出结果的方式生成 Python 源代码。
+
+如此一来，大家将能够像读取其它程序一样，直接读取自动导数代码。Tangent 不仅适用于希望利用 Python 编写模型的研究人员与学生，同时亦能够在不牺牲灵活性与速度表现的前提下读取并调试自动生成的导数代码。大家可以轻松检查并调试您利用 Tangent 编写的模型，且无需使用任何特殊工具或者间接性方式。Tangent 能够对接 Python 生态系统内庞大且不断增加的各类功能子集，提供其它 Python 机器学习库所不具备的额外 autodiff 特性，性能出色且可与 TensorFlow 及 NumPy 相兼容。
+
+
+
+angent.grad 会首先提取您传递给它的 Python 函数源代码。Tangent 拥有大量 Python 语法导数配方库，同时亦支持 TensorFlow Eager 函数。函数 tangent.grad 随后会以反向顺序遍历您的代码，查找匹配的反向传播配方，并将其浯对导数函数末尾。
+
+这种逆序处理方式拥有自己的特定名称：反向模式自动微分。
+
+以上 df 函数仅适用于标量（非数组）输入内容。Tangent 亦支持：利用 TensorFlow Eager 函数 ，以处理数字数组子例程控制流虽然我们选择 TensorFlow Eager 支持作为起点，但 Tangent 绝不仅限于一种或者多种特定库——我们乐于将更多 PyTorch 或者 MXNet 导数配方添加到 Tangent 库当中。
+
+
+
+
 Existing libraries implement automatic differentiation by tracing a program's execution (at runtime, like PyTorch) or by staging out a dynamic data-flow graph and then differentiating the graph (ahead-of-time, like TensorFlow). In contrast, Tangent performs ahead-of-time autodiff on the Python source code itself, and produces Python source code as its output. Tangent fills a unique location in the space of machine learning tools.
 
 ![Autodiff Tool Space](docs/toolspace.png "Autodiff Tool Space")
